@@ -1,0 +1,18 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated output
+**/node_modules/
+**/dist/
+coverage/
+*.tsbuildinfo
+
+# User-uploaded files and local logs
+/uploads/
+*.log
+npm-debug.log*
+
+# Private planning document
+/Plan Técnico y de Diseño - CineVerde.md - Documentos de Google.pdf

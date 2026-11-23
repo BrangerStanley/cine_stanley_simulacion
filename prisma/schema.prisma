@@ -1,0 +1,70 @@
+// Prisma schema para CineStanley
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String // Hash
+  role     Role   @default(CLIENT)
+}
+
+enum Role {
+  CLIENT
+  STAFF
+  ADMIN
+}
+
+model Movie {
+  id          String     @id @default(uuid())
+  title       String
+  duration    Int
+  description String
+  posterUrl   String?
+  trailerUrl  String?
+  functions   Function[]
+}
+
+model Theater {
+  id        String     @id @default(uuid())
+  name      String
+  capacity  Int
+  functions Function[]
+}
+
+model Function {
+  id        String    @id @default(uuid())
+  movieId   String
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  theaterId String
+  theater   Theater   @relation(fields: [theaterId], references: [id])
+  startTime DateTime
+  reservations Reservation[]
+}
+
+model Reservation {
+  id        String   @id @default(uuid())
+  functionId String
+  function  Function @relation(fields: [functionId], references: [id])
+  seatNumber String
+  status    ReservationStatus @default(PENDING)
+  customerName String
+  paymentProof     String?
+  paymentImageUrl  String?
+  reviewedBy       String?
+  createdAt DateTime @default(now())
+}
+
+enum ReservationStatus {
+  PENDING
+  PAID
+  CHECKED_IN
+  CANCELLED
+}
